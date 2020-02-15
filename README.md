@@ -1,5 +1,7 @@
 # GuamOxygenIsotopes
 ISOLUTION and cave monitoring in Jinapsan Cave, Guam
+
+      #############################################################################################################
       oxygen_isotope_stats_functions.py:
 
        
@@ -15,7 +17,7 @@ ISOLUTION and cave monitoring in Jinapsan Cave, Guam
       
       Hu, J., Emile-Geay, J., Partin, J. 2017. Correlation-based interpretations of paleoclimate data—
             where statistics meet past climates. Earth and Plan. Sci. Let. 459:362-371.
-
+      ##############################################################################################################
       /ISOLUTION_MOD/*
             MATLAB code in /ISOLUTION_MOD/ was originally written by Michael Deininger (Deininger and Scholz, 2019). 
             It was then modified by Michael Deininger and Alexandra Noronha for this research. 
