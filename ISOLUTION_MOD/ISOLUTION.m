@@ -25,7 +25,7 @@ switch(mode)
     case 'single'
         disp('Please insert the following input parameter:')
         disp(' ')
-        temperature = input('Temperature in 캜: ');
+        temperature = input('Temperature in 째C: ');
         drip_interval = input('Drip interval in s: ');
         drip_ca = input('Drip water Ca in ppm: ');
         cave_pco2 = input('Cave air pCO2 in ppm: ');
@@ -103,7 +103,7 @@ switch(mode)
 
                 disp('Please insert the following input parameter:')
                 disp(' ')
-                temperature = input('Temperature in 캜, e.g., 10 for 10캜: ');
+                temperature = input('Temperature in 째C, e.g., 10 for 10째C: ');
                 drip_ca = input('Drip water Ca in ppm: ');
                 cave_pco2 = input('Cave air pCO2 in ppm, e.g., 300 for 300ppm: ');
                 cave_pco2 = cave_pco2/1000000;
@@ -147,8 +147,8 @@ switch(mode)
                 disp('Please insert the following input parameter:')
                 disp(' ')
                 disp('First, the temperature range must be determined.')
-                temperature_start = input('Please insert the smallest value of the temperature range (e.g. 5 for 5캜)');
-                temperature_end = input('Please insert the highest value of the temperature range (e.g. 10 for 10캜)');
+                temperature_start = input('Please insert the smallest value of the temperature range (e.g. 5 for 5째C)');
+                temperature_end = input('Please insert the highest value of the temperature range (e.g. 10 for 10째C)');
                 while temperature_end < temperature_start
                     input('The highest value of the temperature range should be higher then the smallest temperature of the temperature range: please insert a higher value.')
                 end
@@ -194,9 +194,9 @@ switch(mode)
 
                 output = [d18O_calcite, d13C_calcite, d18O_water];
 
-                figure(1), hold on, plot(temperature_range, d18O_calcite,  'b', 'linewidth', 2), xlabel('temperature (캜)', 'fontname', 'timesnewroman', 'fontsize', 16), ylabel('\delta^{18}O_{calcite} (per mil)', 'fontname', 'timesnewroman', 'fontsize', 16)
-                figure(2), hold on, plot(temperature_range, d13C_calcite, 'r', 'linewidth', 2), xlabel('temperature (캜)', 'fontname', 'timesnewroman', 'fontsize', 16), ylabel('\delta^{13}C_{calcite} (per mil)', 'fontname', 'timesnewroman', 'fontsize', 16)
-                figure(3), hold on, plot(temperature_range, d18O_water, 'c', 'linewidth', 2), xlabel('temperature (캜)', 'fontname', 'timesnewroman', 'fontsize', 16), ylabel('\delta^{18}O_{water} (per mil)', 'fontname', 'timesnewroman', 'fontsize', 16)
+                figure(1), hold on, plot(temperature_range, d18O_calcite,  'b', 'linewidth', 2), xlabel('temperature (째C)', 'fontname', 'timesnewroman', 'fontsize', 16), ylabel('\delta^{18}O_{calcite} (per mil)', 'fontname', 'timesnewroman', 'fontsize', 16)
+                figure(2), hold on, plot(temperature_range, d13C_calcite, 'r', 'linewidth', 2), xlabel('temperature (째C)', 'fontname', 'timesnewroman', 'fontsize', 16), ylabel('\delta^{13}C_{calcite} (per mil)', 'fontname', 'timesnewroman', 'fontsize', 16)
+                figure(3), hold on, plot(temperature_range, d18O_water, 'c', 'linewidth', 2), xlabel('temperature (째C)', 'fontname', 'timesnewroman', 'fontsize', 16), ylabel('\delta^{18}O_{water} (per mil)', 'fontname', 'timesnewroman', 'fontsize', 16)
 
             case 'evo_pco2cave'
                 
@@ -215,7 +215,7 @@ switch(mode)
                 disp('Please insert the following input parameter:')
                 disp(' ')
                 dripinterval = input('Drip interval in seconds (no comma values), e.g., 100 for 100seconds: ');
-                temperature = input('Temperature in 캜, e.g., 10 for 10캜: ');
+                temperature = input('Temperature in 째C, e.g., 10 for 10째C: ');
                 drip_pco2 = input('Drip water pCO2 in ppm, e.g., 10000 for 10.000ppm: ');
                 drip_pco2 = drip_pco2/1000000;
                 h = input('Relative humidity (0<h<=1) (e.g. 90% = 0.9): ');
@@ -270,7 +270,7 @@ switch(mode)
                 disp('Please insert the following input parameter:')
                 disp(' ')
                 dripinterval = input('Drip interval in seconds (no comma values), e.g., 300 for 300seconds: ');
-                temperature = input('Temperature in 캜, e.g., 10 for 10캜: ');
+                temperature = input('Temperature in 째C, e.g., 10 for 10째C: ');
                 cave_pco2 = input('Cave air pCO2 in ppm, e.g., 300 for 300ppm: ');
                 cave_pco2 = cave_pco2/1000000;
                 h = input('Relative humidity (0<h<=1) (e.g. 90% = 0.9): ');
@@ -324,7 +324,7 @@ switch(mode)
                 disp('Please insert the following input parameter:')
                 disp(' ')
                 dripinterval = input('Drip interval in seconds (no comma values), e.g., 300 for 300seconds: ');
-                temperature = input('Temperature in 캜, e.g., 10 for 10캜: ');
+                temperature = input('Temperature in 째C, e.g., 10 for 10째C: ');
                 drip_pco2 = input('Drip water pCO2 in ppm, e.g., 10000 for 10.000ppm: ');
                 drip_pco2 = drip_pco2/1000000;
                 cave_pco2 = input('Cave air pCO2 in ppm, e.g., 300 for 300ppm: ');
