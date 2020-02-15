@@ -48,7 +48,7 @@ dt = 1;
 t=1:tmax;
         
 HCO = [];                                %Konzentration von HCO3-
-HCO(end+1) = HCOMIX;                    %Start-Konzentration der Lösung ohne Verdunstung
+HCO(end+1) = HCOMIX;                    %Start-Konzentration der LÃ¶sung ohne Verdunstung
 hco = [];              %Menge an HCO3-
 hco(end+1) = hco_ini;
 H2O = [];
@@ -68,11 +68,11 @@ for i=1:length(t)
     d_h2o = -eva;                                               %Evaporationrate (mol/l)
     H2O(end+1,1) = h2o(end)*18*1e-3;                                   %Water (l)
             
-    %Die Gleichgewichtskonzentration ist unabhängig von der
+    %Die Gleichgewichtskonzentration ist unabhÃ¤ngig von der
     %"Restwassermenge" und daher konstant
     HCO_EQ = HCOCAVE;                                           %Equilibriumconcentration
             
-    %Berechnung der Konzentration unter Berücksichtigung der
+    %Berechnung der Konzentration unter BerÃ¼cksichtigung der
     %Verdundstung
     HCO_temp = (HCO(end) - HCO_EQ) * exp(-dt/(delta/alpha_p)) + HCO_EQ;       %HCO3- concentration after timeintervall dt
     hco(end+1,1) = HCO_temp * H2O(end-1);                         %HCO3- mass (mol)
