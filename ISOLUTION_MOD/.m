@@ -1,7 +1,7 @@
 function output = CALCPCO2(ca, TC)
 
 %input variable is Ca2+ concentration of the drip water in mol/l and the
-%ave air temperature in °C
+%ave air temperature in Â°C
 
 pco2int = [0:100000e-6:1000000e-6];
 
