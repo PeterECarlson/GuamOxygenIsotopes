@@ -38,11 +38,11 @@ ISOLUTION and cave monitoring in Jinapsan Cave, Guam
       Affek, H.P., and Zaarur, S. 2014. Kinetic isotope effect in CO2 degassing: insight from clumped and
             oxygen isotopes in laboratory precipitation experiments. Geochimica et Cosmochimica Acta. 143, 319-330.	
 
-      Deininger, M., and Scholz, D. 2019. ISOLUTION 1.0: an ISOtope evoLUTION model describing the stable oxygen (δ18O) 
-            and carbon (δ13C) isotope values of speleothems. Int. J. of Speleology 48(1).
+      Deininger, M., and Scholz, D. 2019. ISOLUTION 1.0: an ISOtope evoLUTION model describing the stable oxygen 
+            (δ18O) and carbon (δ13C) isotope values of speleothems. Int. J. of Speleology 48(1).
 
-      Hansen, M., Dreybrodt, W., and Scholz, D., 2013. Chemical evolution of dissolved inorganic carbon species flowing
-            in thin water films and its implications for (rapid) degassing of CO2 during speleothem growth. Gheochim. 
-            Cosmochim. Acta 207, 242-251.
+      Hansen, M., Dreybrodt, W., and Scholz, D., 2013. Chemical evolution of dissolved inorganic carbon species 
+            flowing in thin water films and its implications for (rapid) degassing of CO2 during speleothem growth. 
+            Geochim. Cosmochim. Acta 207, 242-251.
       
    
