@@ -184,7 +184,7 @@ def correlate_vs_driprate(cave_results_df):
                }}''')
     
     x_1 = to_regress[to_regress['DripsPerMin'] <= x_b]['DripsPerMin'].values
-    y_1 = to_regress[to_regress['DripsPerMin'] <= x_b]['Δ18OPDB'].values
+    y_1 = to_regress[to_regress['DripsPerMin'] <= sx_b]['Δ18OPDB'].values
     f_1 = lambda x: m_1*x + b_1
 
     ar_corr_dict= correlate_with_ar_correction(f_1(x_1),y_1)
