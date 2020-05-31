@@ -64,6 +64,27 @@ def load_cave_data():
     
     return cave_results_df
 
+def load_drip_data():
+    """
+    Reads and processes drip water data from Carlson et al 2020 Supplemental Data.
+    Shows error propagation for derived properties
+    
+    Returns
+    -------
+    cave_results_df : pandas dataframe
+    """
+    # Read Data 
+    drip_results_df = pd.read_excel(
+            './Carlson2020_Supplement.xlsx',
+            sheet_name='TableA1_Measured_DripWater',
+            skiprows=[0,2]
+    )
+    print(drip_results_df.columns)
+    
+    
+    return drip_results_df
+
+
 def add_calcite_growth_columns(cave_results_df):
     """
     Calculates Calcite Growth, Rc, and log Rc
@@ -164,10 +185,9 @@ def correlate_vs_driprate(cave_results_df):
     m_2_s = band_corr_dict['sigmas'][3]
     
     dm_s = (m_1_s**2 - m_2_s**2)**(0.5)
-    
-    b_2_s = (((dm*x_b)**2)*(
-                    (dm_s/dm)**2 + (x_b_s/x_b)**2)
-             + b_1_s**2)**(0.5)    
+    dm_v_rel = (dm_s / dm)**2
+    x_b_v_rel = (x_b_s / x_b)**2
+    b_2_s = (((dm * x_b)**2) * (dm_v_rel + x_b_v_rel) + b_1_s**2)**(0.5)    
     print(f'''
     ###################################################################
     # CALCITE-WATER OXYGEN ISOTOPE FRACTIONATION FACTORS v. DRIP RATE #
@@ -184,8 +204,8 @@ def correlate_vs_driprate(cave_results_df):
                }}''')
     
     x_1 = to_regress[to_regress['DripsPerMin'] <= x_b]['DripsPerMin'].values
-    y_1 = to_regress[to_regress['DripsPerMin'] <= sx_b]['Δ18OPDB'].values
-    f_1 = lambda x: m_1*x + b_1
+    y_1 = to_regress[to_regress['DripsPerMin'] <= x_b]['Δ18OPDB'].values
+    f_1 = lambda x: m_1 * x + b_1
 
     ar_corr_dict= correlate_with_ar_correction(f_1(x_1),y_1)
 
@@ -201,9 +221,9 @@ def correlate_vs_driprate(cave_results_df):
     
     x_2 = to_regress[to_regress['DripsPerMin'] > x_b]['DripsPerMin'].values
     y_2 = to_regress[to_regress['DripsPerMin'] > x_b]['Δ18OPDB'].values
-    f_2 = lambda x: m_2*x + b_2
+    f_2 = lambda x: m_2 * x + b_2
     
-    ar_corr_dict = correlate_with_ar_correction(f_2(x_2),y_2)
+    ar_corr_dict = correlate_with_ar_correction(f_2(x_2), y_2)
     
     print(f'''
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~          
@@ -233,7 +253,7 @@ def correlate_vs_rc(cave_results_df):
             ].copy()
     x = to_regress['logRc'].values
     y = to_regress['Δ18OPDB'].values
-    func = lambda x, a, b: a*x + b
+    func = lambda x, a, b: a * x + b
     band_corr_dict = correlate_with_uncertainty_band(
             x,
             y,
@@ -246,7 +266,7 @@ def correlate_vs_rc(cave_results_df):
     m_s = band_corr_dict['sigmas'][0]
     b_s = band_corr_dict['sigmas'][1]
     
-    f_1 = lambda x: m*x + b
+    f_1 = lambda x: m * x + b
     ar_corr_dict= correlate_with_ar_correction(f_1(x),y)
 
     print(f'''
@@ -289,14 +309,14 @@ def piecewise_linear_continuous(x, x_b, m_1, b_1, m_2):
         dependent variable
     """
     
-    y=x*0 # initialize y
+    y = x * 0 # initialize y
     
     # Function Left of x_b
-    y[x<=x_b] = m_1*x[x<=x_b] + b_1
+    y[x <= x_b] = m_1 * x[x <= x_b] + b_1
     
     # Function right of x_b
-    b_2 = (m_1 - m_2)*(x_b)
-    y[x>x_b] = m_2*x[x>x_b] + b_1 + b_2
+    b_2 = (m_1 - m_2) * (x_b)
+    y[x > x_b] = m_2 * x[x > x_b] + b_1 + b_2
     
     return y
 
@@ -351,7 +371,7 @@ def correlate_with_uncertainty_band(x, y, func, alpha=0.05, x_hat_res=200,
     xbar = np.mean(x)
     ybar = np.mean(y)
     
-    sum_of_squares = lambda x : np.dot(x,x)
+    sum_of_squares = lambda x : np.dot(x, x)
     SSxx = sum_of_squares(x - xbar) # sum of squares in x
     SSyy = sum_of_squares(y - ybar) # sum of squares in y
     SSe = sum_of_squares(y - func(x, *popt)) # sum of squares of the error
@@ -367,15 +387,15 @@ def correlate_with_uncertainty_band(x, y, func, alpha=0.05, x_hat_res=200,
     if band_type.lower() == 'prediction':
         sigma_xy = np.sqrt(SSe/(n-len(popt)))
         error_func = lambda x: t * sigma_xy * np.sqrt(
-                1 + 1/n + (np.square(x - xbar))/SSxx)        
+                1 + 1/n + (np.square(x - xbar)) / SSxx)        
         p_lower = np.empty_like(popt)
         p_upper = np.empty_like(popt)
         bound_lower = y_hat - error_func(x_hat)
         bound_upper = y_hat + error_func(x_hat)
         
     elif band_type.lower() == 'confidence':
-        p_lower = popt - sigmas*t
-        p_upper = popt + sigmas*t
+        p_lower = popt - sigmas * t
+        p_upper = popt + sigmas * t
         bound_lower = func(x_hat, *p_lower)
         bound_upper = func(x_hat, *p_upper)
         
