@@ -54,7 +54,7 @@ def load_cave_data():
     # Read Data 
     cave_results_df = pd.read_excel(
             './Carlson2020_Supplement.xlsx',
-            sheet='TableA1_CaveResults',
+            sheet_name='TableA2_Calcite_&_Model_Results',
             skiprows=[0,2]
     )
     cave_results_df = add_drip_columns(cave_results_df)
