@@ -57,6 +57,7 @@ def load_cave_data():
             sheet_name='TableA2_Calcite_&_Model_Results',
             skiprows=[0,2]
     )
+    print(cave_results_df.columns)
     cave_results_df = add_drip_columns(cave_results_df)
     cave_results_df = add_calcite_growth_columns(cave_results_df)
     
