@@ -133,7 +133,7 @@ def correlate_vs_driprate(cave_results_df):
     """
     # Filter data for valid drip rate and fractionation values
     to_regress = cave_results_df[
-            (cave_results_df['CapDelta18OPDB'].notnull()) 
+            (cave_results_df['Δ18OPDB'].notnull()) 
             & (cave_results_df['DripsPerMin'].notnull())
             & (np.isfinite(cave_results_df['DripRate_Err']))
             ].copy()
@@ -142,7 +142,7 @@ def correlate_vs_driprate(cave_results_df):
     correlation_function = lambda x, x_b, m_1, b_1, m_2: (
             piecewise_linear_continuous(x, x_b, m_1, b_1, m_2))
     x = to_regress['DripsPerMin'].values
-    y = to_regress['CapDelta18OPDB'].values
+    y = to_regress['Δ18OPDB'].values
     band_corr_dict = correlate_with_uncertainty_band(
             x,
             y,
@@ -183,8 +183,8 @@ def correlate_vs_driprate(cave_results_df):
     x >  {x_b:0.2f}
                }}''')
     
-    x_1 = to_regress[to_regress['DripsPerMin']<=x_b]['DripsPerMin'].values
-    y_1 = to_regress[to_regress['DripsPerMin']<=x_b]['CapDelta18OPDB'].values
+    x_1 = to_regress[to_regress['DripsPerMin'] <= x_b]['DripsPerMin'].values
+    y_1 = to_regress[to_regress['DripsPerMin'] <= x_b]['Δ18OPDB'].values
     f_1 = lambda x: m_1*x + b_1
 
     ar_corr_dict= correlate_with_ar_correction(f_1(x_1),y_1)
@@ -199,8 +199,8 @@ def correlate_vs_driprate(cave_results_df):
         p = {ar_corr_dict['pval']:0.2e}''')
     
     
-    x_2 = to_regress[to_regress['DripsPerMin']>x_b]['DripsPerMin'].values
-    y_2 = to_regress[to_regress['DripsPerMin']>x_b]['CapDelta18OPDB'].values
+    x_2 = to_regress[to_regress['DripsPerMin'] > x_b]['DripsPerMin'].values
+    y_2 = to_regress[to_regress['DripsPerMin'] > x_b]['Δ18OPDB'].values
     f_2 = lambda x: m_2*x + b_2
     
     ar_corr_dict = correlate_with_ar_correction(f_2(x_2),y_2)
@@ -227,12 +227,12 @@ def correlate_vs_rc(cave_results_df):
     cave_results_df : pandas dataframe
     """    
     to_regress = cave_results_df[
-            (pd.notnull(cave_results_df['CapDelta18OPDB']))
+            (pd.notnull(cave_results_df['Δ18OPDB']))
             & (pd.notnull(cave_results_df.GrowthRate))
             & (cave_results_df.GrowthRate > 0)
             ].copy()
     x = to_regress['logRc'].values
-    y = to_regress['CapDelta18OPDB'].values
+    y = to_regress['Δ18OPDB'].values
     func = lambda x, a, b: a*x + b
     band_corr_dict = correlate_with_uncertainty_band(
             x,
