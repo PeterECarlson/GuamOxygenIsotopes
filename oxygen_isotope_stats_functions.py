@@ -71,7 +71,7 @@ def load_drip_data():
     
     Returns
     -------
-    cave_results_df : pandas dataframe
+    drip_results_df : pandas dataframe
     """
     # Read Data 
     drip_results_df = pd.read_excel(
@@ -79,10 +79,68 @@ def load_drip_data():
             sheet_name='TableA1_Measured_DripWater',
             skiprows=[0,2]
     )
+    drip_results_df = add_drip_columns(drip_results_df)
     print(drip_results_df.columns)
     
     
     return drip_results_df
+
+def load_external_data():
+    """
+    Reads and processes drip water data from Carlson et al 2020 Supplemental Data.
+    Shows error propagation for derived properties
+    
+    Returns
+    -------
+    ext_results_df : pandas dataframe
+    """
+    # Read Data 
+    ext_results_df = pd.read_excel(
+            './Carlson2020_Supplement.xlsx',
+            sheet_name='TableA3_ExternalRecords',
+    )
+    print(ext_results_df.columns)
+    
+    return ext_results_df
+
+def load_continuous_co2():
+    """
+    Reads and processes continuous CO2 data from Carlson et al 2020 
+    Supplemental Data. CO2 given in ppmv.
+    
+    Returns
+    -------
+    ext_results_df : pandas dataframe
+    """
+    # Read Data 
+    ext_results_df = pd.read_excel(
+            './Carlson2020_Supplement.xlsx',
+            sheet_name='TableA4_ContinuousPCO2',
+    )
+    ext_results_df['Datetime'] = pd.DatetimeIndex(ext_results_df['Datetime'])
+    ext_results_df.set_index('Datetime', inplace=True, drop=False)
+    print(ext_results_df.columns)
+    
+    return ext_results_df
+
+def load_spot_co2():
+    """
+    Reads and processes spot CO2 measurements from Carlson et al 2020 
+    Supplemental Data. CO2 given in ppmv.
+    
+    Returns
+    -------
+    ext_results_df : pandas dataframe
+    """
+    # Read Data 
+    ext_results_df = pd.read_excel(
+            './Carlson2020_Supplement.xlsx',
+            sheet_name='TableA5_SpotPCO2',
+    )
+    ext_results_df['Datetime'] = pd.DatetimeIndex(ext_results_df['Datetime'])
+    ext_results_df.set_index('Datetime', inplace=True, drop=False)
+    print(ext_results_df.columns)
+    return ext_results_df
 
 
 def add_calcite_growth_columns(cave_results_df):
@@ -136,9 +194,11 @@ def add_drip_columns(cave_results_df):
     cave_results_df['DripsPerMin'] = 60.0/cave_results_df['DripInterval']
 
     # Error Propagation
-    cave_results_df['DripRate_Err'] = (60*cave_results_df['DripInterval_err'] / 
-                   cave_results_df['DripInterval'].pow(2))
-    
+    try:
+        cave_results_df['DripRate_Err'] = (60*cave_results_df['DripInterval_err'] / 
+                                           cave_results_df['DripInterval'].pow(2))
+    except:
+        pass
     return cave_results_df
 
 def correlate_vs_driprate(cave_results_df):
@@ -208,15 +268,16 @@ def correlate_vs_driprate(cave_results_df):
     f_1 = lambda x: m_1 * x + b_1
 
     ar_corr_dict= correlate_with_ar_correction(f_1(x_1),y_1)
-
+    r2_1 = ar_corr_dict['r_squared']
+    p_1 = ar_corr_dict['pval']
     print(f'''
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~          
     Below Break Point:
         
         f_low(x) = ({m_1:0.2f} +/- {m_1_s:0.2f})*x + ({b_1:0.2f} +/- {b_1_s:0.2f})
     
-        r_squared = {ar_corr_dict['r_squared']:0.2f}
-        p = {ar_corr_dict['pval']:0.2e}''')
+        r_squared = {r2_1:0.2f}
+        p = {p_1:0.2e}''')
     
     
     x_2 = to_regress[to_regress['DripsPerMin'] > x_b]['DripsPerMin'].values
@@ -224,7 +285,8 @@ def correlate_vs_driprate(cave_results_df):
     f_2 = lambda x: m_2 * x + b_2
     
     ar_corr_dict = correlate_with_ar_correction(f_2(x_2), y_2)
-    
+    r2_2 = ar_corr_dict['r_squared']
+    p_2 = ar_corr_dict['pval']    
     print(f'''
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~          
     Above Break Point:
@@ -234,7 +296,25 @@ def correlate_vs_driprate(cave_results_df):
         r_squared = {ar_corr_dict['r_squared']:0.2f}
         p = {ar_corr_dict['pval']:0.2e}''')
         
-    return None
+    return_dict = {
+        'm_1': m_1,
+        'm_1_s': m_1_s,
+        'b_1': b_1,
+        'b_1_s':b_1_s,
+        'r2_1': r2_1,
+        'p_1': p_1,
+        'x_b': x_b,
+        'x_b_s':x_b_s,
+        'm_2': m_2,
+        'm_2_s': m_2_s,
+        'b_2': b_2,
+        'b_2_s':b_2_s,
+        'r2_2': r2_2,
+        'p_2': p_2, 
+        'x_hat': band_corr_dict['x_hat'],
+        'uncertainty_band': band_corr_dict['uncertainty_band']
+        }
+    return return_dict
         
 def correlate_vs_rc(cave_results_df):
     """
