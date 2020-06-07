@@ -80,7 +80,6 @@ def load_drip_data():
             skiprows=[0,2]
     )
     drip_results_df = add_drip_columns(drip_results_df)
-    print(drip_results_df.columns)
     
     
     return drip_results_df
@@ -99,7 +98,6 @@ def load_external_data():
             './Carlson2020_Supplement.xlsx',
             sheet_name='TableA3_ExternalRecords',
     )
-    print(ext_results_df.columns)
     
     return ext_results_df
 
@@ -110,18 +108,17 @@ def load_continuous_co2():
     
     Returns
     -------
-    ext_results_df : pandas dataframe
+    cont_co2_df : pandas dataframe
     """
     # Read Data 
-    ext_results_df = pd.read_excel(
+    cont_co2_df = pd.read_excel(
             './Carlson2020_Supplement.xlsx',
             sheet_name='TableA4_ContinuousPCO2',
     )
-    ext_results_df['Datetime'] = pd.DatetimeIndex(ext_results_df['Datetime'])
-    ext_results_df.set_index('Datetime', inplace=True, drop=False)
-    print(ext_results_df.columns)
+    cont_co2_df['Datetime'] = pd.DatetimeIndex(cont_co2_df['Datetime'])
+    cont_co2_df.set_index('Datetime', inplace=True, drop=False)
     
-    return ext_results_df
+    return cont_co2_df
 
 def load_spot_co2():
     """
@@ -130,17 +127,16 @@ def load_spot_co2():
     
     Returns
     -------
-    ext_results_df : pandas dataframe
+    spot_co2_df : pandas dataframe
     """
     # Read Data 
-    ext_results_df = pd.read_excel(
+    spot_co2_df = pd.read_excel(
             './Carlson2020_Supplement.xlsx',
             sheet_name='TableA5_SpotPCO2',
     )
-    ext_results_df['Datetime'] = pd.DatetimeIndex(ext_results_df['Datetime'])
-    ext_results_df.set_index('Datetime', inplace=True, drop=False)
-    print(ext_results_df.columns)
-    return ext_results_df
+    spot_co2_df['Datetime'] = pd.DatetimeIndex(spot_co2_df['Datetime'])
+    spot_co2_df.set_index('Datetime', inplace=True, drop=False)
+    return spot_co2_df
 
 
 def add_calcite_growth_columns(cave_results_df):
@@ -229,7 +225,7 @@ def correlate_vs_driprate(cave_results_df):
             y,
             correlation_function,
             alpha=0.1,
-            band_type = 'prediction'
+            band_type = 'confidence'
             )
     
     x_b = band_corr_dict['popt'][0]
@@ -400,7 +396,8 @@ def piecewise_linear_continuous(x, x_b, m_1, b_1, m_2):
     
     return y
 
-def correlate_with_uncertainty_band(x, y, func, alpha=0.05, x_hat_res=200,
+def correlate_with_uncertainty_band(x, y, func=lambda x, m, b: m * x + b, 
+                                    alpha=0.05, x_hat_res=200,
                                     band_type='confidence'):
     """
     Creates best-fit parameters and upper and lower confidence bands

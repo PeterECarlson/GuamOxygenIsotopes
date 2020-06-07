@@ -1,5 +1,29 @@
 # GuamOxygenIsotopes
 ISOLUTION and cave monitoring in Jinapsan Cave, Guam
+      #############################################################################################################
+      GCA_2020_processing.py:
+            This contains functionationality to:
+                  Process and aggregate measured supplementary data. This will 
+                  take higher-resolution drip water data (and PCO2 measurements)
+                  and aggregate it to match the lower-resolution model and calcite data.
+                  
+      GCA_2020_ploting.py:
+            This contains functionationality to:
+                  Generate all plots for the paper. Calculates and prints all 
+                  statistical outputs.     
+       
+      oxygen_isotope_stats_functions.py:
+            This contains functionationality to:
+                  read the supplementary material
+                  propagate uncertainties for some derived variables
+                  correlate data using a 2-part piecewise linear function
+                  calculate linear correlation significance, correction for autoregressive
+                  characteristics (After Hu et al., 2017)
+      
+      References:
+      
+      Hu, J., Emile-Geay, J., Partin, J. 2017. Correlation-based interpretations of paleoclimate data—
+            where statistics meet past climates. Earth and Plan. Sci. Let. 459:362-371.
 
       #############################################################################################################
       oxygen_isotope_stats_functions.py:
